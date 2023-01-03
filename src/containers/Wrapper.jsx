@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
 
-const Todo = () => {
+const Wrapper = () => {
   return (
     <Fragment>
-      <h1>Todo</h1>
+      <h1>app 입니다.</h1>
       <Outlet />
     </Fragment>
   );
 };
 
-export default Todo;
+export default Wrapper;
