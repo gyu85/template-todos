@@ -8,3 +8,11 @@ export const requestLogin = params => {
     params: params
   });
 };
+
+export const requestSignUp = params => {
+  return api({
+    url: `${APIURL}/users/create`,
+    method: 'POST',
+    params: params
+  });
+};
