@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { requestLogin } from 'api/auth';
+import { setLocalforage } from 'utils/localforage';
 
 import { isEmailValid, isPasswordValid } from 'utils/string';
+import { useUserDispatch, useUserState } from 'context/UserContext';
 
 const Login = () => {
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [isEmail, setEmailValid] = useState(false);
   const [isPassword, setPasswordValid] = useState(false);
+
+  const { isUserLogin } = useUserState();
+  const dispatch = useUserDispatch();
+
+  const navigate = useNavigate();
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -17,7 +25,13 @@ const Login = () => {
       password: userPassword
     })
       .then(data => {
-        console.log('data', data);
+        const { message, token } = data;
+
+        alert(message);
+        setLocalforage('token', token);
+        dispatch({
+          type: 'LOGIN'
+        });
       })
       .catch(error => {
         alert(error);
@@ -39,6 +53,12 @@ const Login = () => {
         setPasswordValid(isPasswordValid(event.target.value));
     }
   };
+
+  useEffect(() => {
+    if (isUserLogin) {
+      navigate('/todo/list');
+    }
+  }, [isUserLogin, navigate]);
 
   return (
     <div>
