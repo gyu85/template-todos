@@ -6,12 +6,16 @@ import router from 'routes/routes';
 import GlobalStyle from 'assets/styles/global';
 import SpoqaHanSansNeo from 'assets/styles/fonts';
 
+import { UserContextProvider } from 'context/UserContext';
+
 function App() {
   return (
     <Fragment>
-      <RouterProvider router={router}>
-        <Outlet />
-      </RouterProvider>
+      <UserContextProvider>
+        <RouterProvider router={router}>
+          <Outlet />
+        </RouterProvider>
+      </UserContextProvider>
       <SpoqaHanSansNeo />
       <GlobalStyle />
     </Fragment>
