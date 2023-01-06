@@ -1,25 +1,20 @@
 import React, { Fragment } from 'react';
-import { RouterProvider, Outlet } from 'react-router-dom';
-
-import router from 'routes/routes';
-
+import Wrapper from 'containers/Wrapper';
 import GlobalStyle from 'assets/styles/global';
 import SpoqaHanSansNeo from 'assets/styles/fonts';
 
 import { UserContextProvider } from 'context/UserContext';
 
-function App() {
+const App = () => {
   return (
     <Fragment>
       <UserContextProvider>
-        <RouterProvider router={router}>
-          <Outlet />
-        </RouterProvider>
+        <Wrapper />
       </UserContextProvider>
       <SpoqaHanSansNeo />
       <GlobalStyle />
     </Fragment>
   );
-}
+};
 
 export default App;
