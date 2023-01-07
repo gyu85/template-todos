@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
 
-import { createTodo, getTodos } from 'api/todo';
+import { createTodo, getTodos, deleteTodo } from 'api/todo';
 import { getDayYYMMDD } from 'utils/date';
 
 const TodoList = () => {
@@ -23,10 +23,35 @@ const TodoList = () => {
       title: todoTitle,
       content: todoContent
     })
-      .then(data => {
-        console.log(data);
+      .then(updatedData => {
+        const { data } = updatedData;
+        setTodos(prevTodos => [...prevTodos, data]);
         setTodoTitle('');
         setTodoContent('');
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+
+  const deleteCurrentTodo = event => {
+    const currentId = event.currentTarget.dataset.id;
+
+    deleteTodo(currentId)
+      .then(() => {
+        alert('해당 todo가 삭제 되었습니다.');
+
+        setTodos(prevTodos => {
+          return prevTodos.reduce((acumulate, current) => {
+            const { id } = current;
+
+            if (id !== currentId) {
+              acumulate.push(current);
+            }
+
+            return acumulate;
+          }, []);
+        });
       })
       .catch(error => {
         alert(error);
@@ -108,7 +133,8 @@ const TodoList = () => {
                 |
                 <button
                   type='button'
-                  data-id={id}>
+                  data-id={id}
+                  onClick={deleteCurrentTodo}>
                   삭제
                 </button>
               </div>
