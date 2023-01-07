@@ -14,3 +14,10 @@ export const getTodos = () => {
     url: `${APIURL}/todos`
   });
 };
+
+export const deleteTodo = todoId => {
+  console.log(todoId);
+  return api({
+    url: `${APIURL}/todos/${todoId}`
+  });
+};

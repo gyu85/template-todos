@@ -9,11 +9,14 @@ const Todo = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getLocalItem('token')
-      .then(token => {
-        if (token) {
+    getLocalItem('userTodoInfo')
+      .then(data => {
+        if (data) {
+          const { token } = JSON.parse(data);
+
           dispatch({
-            type: 'LOGIN'
+            type: 'LOGIN',
+            token: token
           });
 
           navigate('/todo/list');
@@ -23,6 +26,7 @@ const Todo = () => {
       })
       .catch(error => {
         console.error(error);
+        navigate('login');
       });
 
     // eslint-disable-next-line

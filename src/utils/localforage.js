@@ -1,5 +1,11 @@
 import localforage from 'localforage';
 
-export const setLocalforage = (key, value) => localforage.setItem(key, value);
+export const setLocalforage = (key, value) => {
+  const itemValue = typeof value === 'string' ? value : JSON.stringify(value);
 
-export const getLocalItem = async key => await localforage.getItem(key);
+  return localforage.setItem(key, itemValue);
+};
+
+export const getLocalItem = async key => {
+  return await localforage.getItem(key);
+};

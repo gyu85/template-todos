@@ -1,7 +1,8 @@
 import React, { useReducer, useContext, createContext } from 'react';
 
 const initState = {
-  isUserLogin: false
+  isUserLogin: false,
+  token: null
 };
 
 const UserStateContext = createContext(initState);
@@ -10,7 +11,10 @@ const UserStateDispatch = createContext({ type: 'LOGIN' });
 const reducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
-      return { isUserLogin: true };
+      return {
+        isUserLogin: true,
+        token: action.token
+      };
 
     default:
       return state;

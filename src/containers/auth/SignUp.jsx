@@ -28,9 +28,10 @@ const SignUp = () => {
     })
       .then(data => {
         const { message, token } = data;
+        setLocalforage('userTodoInfo', { token: token });
 
         alert(message);
-        setLocalforage('token', token);
+
         dispatch({
           type: 'LOGIN'
         });

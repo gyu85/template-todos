@@ -26,11 +26,13 @@ const Login = () => {
     })
       .then(data => {
         const { message, token } = data;
+        setLocalforage('userTodoInfo', { token: token });
 
         alert(message);
-        setLocalforage('token', token);
+
         dispatch({
-          type: 'LOGIN'
+          type: 'LOGIN',
+          token: token
         });
       })
       .catch(error => {
@@ -58,7 +60,8 @@ const Login = () => {
     if (isUserLogin) {
       navigate('/todo/list');
     }
-  }, [isUserLogin, navigate]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>
