@@ -33,14 +33,6 @@ const Wrapper = () => {
             path='list'
             element={<TodoList />}
           />
-          <Route
-            path=':id/detail'
-            element={<Detail />}
-          />
-          <Route
-            path=':id/edit'
-            element={<Edit />}
-          />
         </Route>
 
         <Route
