@@ -13,7 +13,9 @@ export const api = async function ({ url, method, params }) {
         Authorization: token ? token : null
       },
       body:
-        (method || '').match(/POST/) && params ? JSON.stringify(params) : null,
+        (method || '').match(/POST|PUT/) && params
+          ? JSON.stringify(params)
+          : null,
       credentials: 'omit'
     });
 

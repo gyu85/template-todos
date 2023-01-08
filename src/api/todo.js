@@ -11,13 +11,30 @@ export const createTodo = params => {
 
 export const getTodos = () => {
   return api({
-    url: `${APIURL}/todos`
+    url: `${APIURL}/todos`,
+    method: 'GET'
+  });
+};
+
+export const getTodoById = todoId => {
+  return api({
+    url: `${APIURL}/todos/${todoId}`,
+    method: 'GET'
+  });
+};
+
+export const updateTodo = ({ todoId, params }) => {
+  console.log(todoId, params);
+  return api({
+    url: `${APIURL}/todos/${todoId}`,
+    method: 'PUT',
+    params: params
   });
 };
 
 export const deleteTodo = todoId => {
-  console.log(todoId);
   return api({
-    url: `${APIURL}/todos/${todoId}`
+    url: `${APIURL}/todos/${todoId}`,
+    method: 'DELETE'
   });
 };
