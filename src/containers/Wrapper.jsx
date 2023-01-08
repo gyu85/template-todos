@@ -6,8 +6,6 @@ import SignUp from 'containers/auth/SignUp';
 
 import Todo from 'containers/todo/index';
 import TodoList from 'containers/todo/TodoList';
-import Detail from 'containers/todo/Detail';
-import Edit from 'containers/todo/Edit';
 
 const Wrapper = () => {
   return (
