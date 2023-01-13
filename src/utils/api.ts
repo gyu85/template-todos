@@ -1,7 +1,23 @@
 import { getLocalItem } from 'utils/localforage';
 
-export const api = async function ({ url, method, params }) {
-  const token = await getLocalItem('token');
+interface IApiParameter {
+  url: string;
+  method: string;
+  params?: any;
+}
+
+const getHeaders = async () => {
+  return await getLocalItem('userTodoInfo').then((item: any) => {
+    if (item?.token) {
+      return item.token;
+    } else {
+      return null;
+    }
+  });
+};
+
+export const api = async function ({ url, method, params }: IApiParameter) {
+  const token = await getHeaders();
 
   try {
     const response = await fetch(url, {
@@ -10,7 +26,7 @@ export const api = async function ({ url, method, params }) {
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: token ? token : null
+        Authorization: token
       },
       body:
         (method || '').match(/POST|PUT/) && params
@@ -29,7 +45,7 @@ export const api = async function ({ url, method, params }) {
     } else {
       return response.json();
     }
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(`${error.details}`).message;
   }
 };

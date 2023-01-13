@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { requestLogin } from 'api/auth';
+import { requestSignUp } from 'api/auth';
 import { setLocalforage } from 'utils/localforage';
 
-import { isEmailValid, isPasswordValid } from 'utils/string';
+import { isEmailValid, isPasswordValid } from 'utils/validation';
 import { useUserDispatch, useUserState } from 'context/UserContext';
 
-const Login = () => {
+const SignUp = () => {
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const [userPasswordConfirm, setUserPasswordConfirm] = useState('');
+
   const [isEmail, setEmailValid] = useState(false);
   const [isPassword, setPasswordValid] = useState(false);
 
@@ -17,10 +19,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = event => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    requestLogin({
+    requestSignUp({
       email: userId,
       password: userPassword
     })
@@ -31,28 +33,41 @@ const Login = () => {
         alert(message);
 
         dispatch({
-          type: 'LOGIN',
-          token: token
+          type: 'LOGIN'
         });
       })
       .catch(error => {
         alert(error);
         setUserId('');
         setUserPassword('');
+        setUserPasswordConfirm('');
+
         setEmailValid(false);
         setPasswordValid(false);
       });
   };
 
-  const handleChange = event => {
+  const handleChange = (event: any) => {
     switch (event.target.name) {
       case 'memberId':
         setUserId(event.target.value);
         setEmailValid(isEmailValid(event.target.value));
         break;
-      default:
+
+      case 'memberPassword':
         setUserPassword(event.target.value);
-        setPasswordValid(isPasswordValid(event.target.value));
+        setPasswordValid(
+          isPasswordValid(event.target.value) &&
+            event.target.value === userPasswordConfirm
+        );
+        break;
+
+      default:
+        setUserPasswordConfirm(event.target.value);
+        setPasswordValid(
+          isPasswordValid(event.target.value) &&
+            event.target.value === userPassword
+        );
     }
   };
 
@@ -60,12 +75,11 @@ const Login = () => {
     if (isUserLogin) {
       navigate('/todo/list');
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [isUserLogin, navigate]);
 
   return (
     <div>
-      <h2>LOGIN</h2>
+      <h2>SignUP</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='memberId'>ID</label>
@@ -85,14 +99,23 @@ const Login = () => {
             onChange={handleChange}
           />
         </div>
+        <div>
+          <label htmlFor=''>비밀번호 확인</label>
+          <input
+            type='password'
+            name='passwordConfirm'
+            value={userPasswordConfirm}
+            onChange={handleChange}
+          />
+        </div>
         <button
           type='submit'
           disabled={!(isEmail && isPassword)}>
-          LOGIN
+          SIGNUP {!(isEmail && isPassword) ? 'disabled' : 'active'}
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default SignUp;

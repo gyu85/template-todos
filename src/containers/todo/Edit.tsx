@@ -1,4 +1,12 @@
-const Edit = ({
+interface IProps {
+  editTodoIdValue: string;
+  editTitleValue: string;
+  editContentValue: string;
+  editSave: (event: any) => void;
+  editChange: (event: any) => void;
+}
+
+const Edit: React.FC<IProps> = ({
   editChange,
   editTodoIdValue,
   editTitleValue,
