@@ -5,7 +5,7 @@ import SpoqaHanSansNeo from 'assets/styles/fonts';
 
 import { UserContextProvider } from 'context/UserContext';
 
-const App = () => {
+function App() {
   return (
     <Fragment>
       <UserContextProvider>
@@ -15,6 +15,6 @@ const App = () => {
       <GlobalStyle />
     </Fragment>
   );
-};
+}
 
 export default App;

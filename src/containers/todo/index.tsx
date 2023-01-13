@@ -7,27 +7,20 @@ import { getLocalItem } from 'utils/localforage';
 const Todo = () => {
   const dispatch = useUserDispatch();
   const navigate = useNavigate();
+  const localItem = getLocalItem('userTodoInfo');
 
   useEffect(() => {
-    getLocalItem('userTodoInfo')
-      .then(data => {
-        if (data) {
-          const { token } = JSON.parse(data);
+    localItem.then((item: any) => {
+      if (item?.token) {
+        dispatch({
+          type: 'LOGIN'
+        });
 
-          dispatch({
-            type: 'LOGIN',
-            token: token
-          });
-
-          navigate('/todo/list');
-        } else {
-          navigate('login');
-        }
-      })
-      .catch(error => {
-        console.error(error);
+        navigate('/todo/list');
+      } else {
         navigate('login');
-      });
+      }
+    });
 
     // eslint-disable-next-line
   }, []);

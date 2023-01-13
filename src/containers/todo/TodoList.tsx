@@ -11,20 +11,28 @@ import {
 import Detail from './Detail';
 import Edit from './Edit';
 
+interface Response {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const TodoList = () => {
-  const [todoTitle, setTodoTitle] = useState('');
-  const [todoContent, setTodoContent] = useState('');
-  const [todos, setTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState<string>('');
+  const [todoContent, setTodoContent] = useState<string>('');
+  const [todos, setTodos] = useState<Array<Response>>([]);
 
-  const [isDetailShow, setDetailShow] = useState(false);
-  const [detailData, setDetailData] = useState({});
+  const [isDetailShow, setDetailShow] = useState<boolean>(false);
+  const [detailData, setDetailData] = useState<any>({});
 
-  const [isEditShow, setEditShow] = useState(false);
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
-  const [editTodoId, setEditTodoId] = useState('');
+  const [isEditShow, setEditShow] = useState<boolean>(false);
+  const [editTitle, setEditTitle] = useState<string>('');
+  const [editContent, setEditContent] = useState<string>('');
+  const [editTodoId, setEditTodoId] = useState<string>('');
 
-  const handleChange = event => {
+  const handleChange = (event: any) => {
     switch (event.target.name) {
       case 'todoTitle':
         setTodoTitle(event.target.value);
@@ -50,15 +58,15 @@ const TodoList = () => {
       });
   };
 
-  const deleteCurrentTodo = event => {
+  const deleteCurrentTodo = (event: any) => {
     const currentId = event.target.dataset.id;
 
     deleteTodo(currentId)
       .then(() => {
         alert('해당 todo가 삭제 되었습니다.');
 
-        setTodos(prevTodos => {
-          return prevTodos.reduce((acumulate, current) => {
+        setTodos((prevTodos: any) => {
+          return prevTodos.reduce((acumulate: any, current: Response) => {
             const { id } = current;
 
             if (id !== currentId) {
@@ -74,7 +82,7 @@ const TodoList = () => {
       });
   };
 
-  const showDetail = event => {
+  const showDetail = (event: any) => {
     const currentid = event.target.dataset.id;
 
     getTodoById(currentid)
@@ -104,7 +112,7 @@ const TodoList = () => {
     setDetailShow(false);
   };
 
-  const editChange = event => {
+  const editChange = (event: any) => {
     switch (event.target.name) {
       case 'editTitle':
         setEditTitle(event.target.value);
@@ -115,7 +123,7 @@ const TodoList = () => {
     }
   };
 
-  const handleModify = event => {
+  const handleModify = (event: any) => {
     const currentTodoId = event.target.dataset.id;
 
     setDetailShow(false);
@@ -136,7 +144,7 @@ const TodoList = () => {
       });
   };
 
-  const editSave = event => {
+  const editSave = (event: any) => {
     const currentId = event.target.dataset.id;
 
     updateTodo({
@@ -152,7 +160,7 @@ const TodoList = () => {
         } = updatedData;
 
         setTodos(prevTodos => {
-          return prevTodos.reduce((acumulate, current) => {
+          return prevTodos.reduce((acumulate: any, current: Response) => {
             const { id } = current;
 
             if (id === currentId) {
@@ -233,7 +241,7 @@ const TodoList = () => {
       <hr />
       <h3>리스트</h3>
       <ul>
-        {todos.reduce((target, item) => {
+        {todos.reduce((target: JSX.Element[], item: any) => {
           const { title, content, id } = item;
 
           target.push(
@@ -268,7 +276,7 @@ const TodoList = () => {
           );
 
           return target;
-        }, [])}
+        }, [] as JSX.Element[])}
       </ul>
       {isDetailShow && (
         <Detail

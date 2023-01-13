@@ -1,6 +1,16 @@
 import { getDayYYMMDD } from 'utils/date';
 
-const Detail = ({ detailData, handleEditModify, handleCancel }) => {
+interface IProps {
+  detailData: any;
+  handleEditModify: () => void;
+  handleCancel: () => void;
+}
+
+const Detail: React.FC<IProps> = ({
+  detailData,
+  handleEditModify,
+  handleCancel
+}) => {
   const { title, content, createdAt, updatedAt } = detailData;
 
   return (
