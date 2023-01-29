@@ -40,12 +40,13 @@ export const api = async function ({ url, method, params }: IApiParameter) {
     if (status >= 400 && status < 500) {
       throw await response.json();
     } else if (status >= 500) {
-      const errorMessage = { details: 'Server Error' };
-      throw errorMessage;
+      throw new Error('Server Error');
     } else {
       return response.json();
     }
-  } catch (error: any) {
-    throw new Error(`${error.details}`).message;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`${error}`).message;
+    }
   }
 };
