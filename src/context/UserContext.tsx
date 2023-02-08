@@ -1,25 +1,25 @@
 import { useReducer, Dispatch, useContext, createContext } from 'react';
 
-interface ILoginInfo {
+interface LoginInfo {
   isUserLogin: boolean;
 }
 
-const UserStateContext = createContext<ILoginInfo | undefined>(undefined);
+const UserStateContext = createContext<LoginInfo | undefined>(undefined);
 
-type ILoginAction = { type: 'LOGIN' };
-type UserStateDispatch = Dispatch<ILoginAction>;
+type LoginAction = { type: 'LOGIN' };
+type UserStateDispatch = Dispatch<LoginAction>;
 
 const UserStateDispatchContext = createContext<UserStateDispatch | undefined>(
   undefined
 );
 
-const initialState = (): ILoginInfo => {
+const initialState = (): LoginInfo => {
   return {
     isUserLogin: false
   };
 };
 
-const reducer = (state: ILoginInfo, action: ILoginAction) => {
+const reducer = (state: LoginInfo, action: LoginAction) => {
   switch (action.type) {
     case 'LOGIN':
       return {
