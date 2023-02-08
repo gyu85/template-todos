@@ -1,11 +1,11 @@
-import { Fragment, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-
-import HeadLine from 'components/common/HeadLine';
 
 import { useUserDispatch } from 'context/UserContext';
 import { getLocalItem } from 'utils/localforage';
+
+import HeadLine from 'components/common/HeadLine';
 
 const SectionContainer = styled.section`
   padding: 8px 16px 28px;
@@ -14,32 +14,43 @@ const SectionContainer = styled.section`
   background-color: #fff;
 `;
 
-const Todo = () => {
+const Auth = () => {
   const dispatch = useUserDispatch();
   const navigate = useNavigate();
   const localItem = getLocalItem('userTodoInfo');
+  const location = useLocation();
+  const [headerText, setHeaderText] = useState('');
 
   useEffect(() => {
     localItem.then(item => {
-      if (item?.token) {
+      if (item) {
         dispatch({
           type: 'LOGIN'
         });
 
-        // navigate('/todo/list');
-        console.log('todo list 여기수정');
-      } else {
-        // navigate('login');
         navigate('/todo/list');
+      } else {
+        navigate('/member/login');
       }
     });
 
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/member/login':
+        setHeaderText('LOGIN');
+        break;
+      case '/member/signUp':
+        setHeaderText('회원가입');
+        break;
+    }
+  }, [location]);
+
   return (
     <Fragment>
-      <HeadLine headerText='TODO' />
+      <HeadLine headerText={headerText} />
       <SectionContainer>
         <Outlet />
       </SectionContainer>
@@ -47,4 +58,4 @@ const Todo = () => {
   );
 };
 
-export default Todo;
+export default Auth;

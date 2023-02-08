@@ -1,9 +1,13 @@
 import localforage from 'localforage';
 
-export const setLocalforage = (key: string, value: string | any) => {
+interface Localforage {
+  [key: string]: any;
+}
+
+export const setLocalforage = (key: string, value: Localforage) => {
   return localforage.setItem(key, value);
 };
 
-export const getLocalItem = async (key: string) => {
-  return await localforage.getItem(key);
+export const getLocalItem = (key: string): Promise<Localforage | null> => {
+  return localforage.getItem(key);
 };

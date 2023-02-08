@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { requestLogin } from 'api/auth';
 import { setLocalforage } from 'utils/localforage';
+
+import TextField from 'components/forms/TextField';
+import ButtonTextType from 'components/common/ButtonTextType';
 
 import { isEmailValid, isPasswordValid } from 'utils/validation';
 import { useUserDispatch, useUserState } from 'context/UserContext';
 
 const Login = () => {
-  const [userId, setUserId] = useState<string>('');
-  const [userPassword, setUserPassword] = useState<string>('');
-  const [isEmail, setEmailValid] = useState<boolean>(false);
-  const [isPassword, setPasswordValid] = useState<boolean>(false);
+  const [userId, setUserId] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [isEmail, setEmailValid] = useState(false);
+  const [isPassword, setPasswordValid] = useState(false);
 
   const dispatch = useUserDispatch();
   const { isUserLogin } = useUserState();
@@ -34,7 +38,7 @@ const Login = () => {
           type: 'LOGIN'
         });
 
-        navigate('/todo/list');
+        // navigate('/todo/list');
       })
       .catch(error => {
         alert(error);
@@ -46,6 +50,7 @@ const Login = () => {
   };
 
   const handleChange = (event: any) => {
+    console.log(event.target);
     switch (event.target.name) {
       case 'memberId':
         setUserId(event.target.value);
@@ -58,40 +63,43 @@ const Login = () => {
   };
 
   useEffect(() => {
-    navigate('/todo/list');
-
+    // navigate('/todo/list');
     // eslint-disable-next-line
   }, [isUserLogin]);
 
   return (
-    <div>
-      <h2>LOGIN</h2>
+    <Fragment>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor='memberId'>ID</label>
-          <input
-            type='text'
-            name='memberId'
-            value={userId}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='memberPassword'>비밀번호</label>
-          <input
-            type='password'
-            name='memberPassword'
-            value={userPassword}
-            onChange={handleChange}
-          />
-        </div>
-        <button
+        <TextField
+          type='text'
+          isLabel={true}
+          htmlFor='memberId'
+          labelText='아이디'
+          fieldValue={userId}
+          isError={false}
+          onChange={handleChange}
+        />
+
+        <TextField
+          type='password'
+          isLabel={true}
+          htmlFor='memberPassword'
+          labelText='비밀번호'
+          fieldValue={userPassword}
+          isError={false}
+          onChange={handleChange}
+        />
+
+        <ButtonTextType
           type='submit'
-          disabled={!(isEmail && isPassword)}>
-          LOGIN
-        </button>
+          size='full'
+          text='LOGIN'
+          onClick={() => console.log('로그인 핸들러 추가')}
+          style={{ marginTop: '20px' }}
+          isDisabled={!(isEmail && isPassword)}
+        />
       </form>
-    </div>
+    </Fragment>
   );
 };
 

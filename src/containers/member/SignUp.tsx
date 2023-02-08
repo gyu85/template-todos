@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
+
+import TextField from 'components/forms/TextField';
+import ButtonTextType from 'components/common/ButtonTextType';
+
 import { useNavigate } from 'react-router-dom';
 import { requestSignUp } from 'api/auth';
 import { setLocalforage } from 'utils/localforage';
@@ -73,48 +77,53 @@ const SignUp = () => {
 
   useEffect(() => {
     if (isUserLogin) {
-      navigate('/todo/list');
+      // navigate('/todo/list');
+      console.log('여기 수정');
     }
   }, [isUserLogin, navigate]);
 
   return (
-    <div>
-      <h2>SignUP</h2>
+    <Fragment>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor='memberId'>ID</label>
-          <input
-            type='text'
-            name='memberId'
-            value={userId}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='memberPassword'>비밀번호</label>
-          <input
-            type='password'
-            name='memberPassword'
-            value={userPassword}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor=''>비밀번호 확인</label>
-          <input
-            type='password'
-            name='passwordConfirm'
-            value={userPasswordConfirm}
-            onChange={handleChange}
-          />
-        </div>
-        <button
+        <TextField
+          type='text'
+          isLabel={true}
+          htmlFor='memberId'
+          labelText='아이디'
+          fieldValue={userId}
+          isError={false}
+          onChange={handleChange}
+        />
+        <TextField
+          type='password'
+          isLabel={true}
+          htmlFor='memberPassword'
+          labelText='비밀번호'
+          fieldValue={userPassword}
+          isError={false}
+          onChange={handleChange}
+        />
+
+        <TextField
+          type='password'
+          isLabel={true}
+          htmlFor='passwordConfirm'
+          labelText='비밀번호 확인'
+          fieldValue={userPasswordConfirm}
+          isError={false}
+          onChange={handleChange}
+        />
+
+        <ButtonTextType
           type='submit'
-          disabled={!(isEmail && isPassword)}>
-          SIGNUP {!(isEmail && isPassword) ? 'disabled' : 'active'}
-        </button>
+          size='full'
+          text='SIGNUP'
+          onClick={() => console.log('회원가입 핸들러 추가')}
+          style={{ marginTop: '20px' }}
+          isDisabled={!(isEmail && isPassword)}
+        />
       </form>
-    </div>
+    </Fragment>
   );
 };
 

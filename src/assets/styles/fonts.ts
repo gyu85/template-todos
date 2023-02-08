@@ -1,11 +1,9 @@
-import { createGlobalStyle } from 'styled-components';
-
 import spoqaHansBold from 'assets/font/SpoqaHanSansNeo-Bold.woff';
 import spoqaHansMedium from 'assets/font/SpoqaHanSansNeo-Medium.woff';
 import spoqaHansRegular from 'assets/font/SpoqaHanSansNeo-Regular.woff';
 import spoqaHansLight from 'assets/font/SpoqaHanSansNeo-Light.woff';
 
-const spoqaHanSansNeo = createGlobalStyle`
+const spoqaHanSansNeo = `
   @font-face {
     font-family: 'Spoqa Han Sans Neo';
     font-weight: 700;

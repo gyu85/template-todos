@@ -1,44 +1,45 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Auth from 'containers/auth/index';
-import Login from 'containers/auth/Login';
-import SignUp from 'containers/auth/SignUp';
+import Member from 'containers/member/index';
+import Login from 'containers/member/Login';
+import SignUp from 'containers/member/SignUp';
 
 import Todo from 'containers/todo/index';
-import TodoList from 'containers/todo/TodoList';
+import Todos from 'containers/todo/todos/Todos';
 
 const Wrapper = () => {
   return (
-    <BrowserRouter>
-      <Routes>
+    <Routes>
+      <Route element={<Member />}>
         <Route
-          path='/auth'
-          element={<Auth />}>
-          <Route
-            path='login'
-            element={<Login />}
-          />
-          <Route
-            path='signUp'
-            element={<SignUp />}
-          />
-        </Route>
-
-        <Route
-          path='/todo'
-          element={<Todo />}>
-          <Route
-            path='list'
-            element={<TodoList />}
-          />
-        </Route>
-
-        <Route
-          path='*'
-          element={<Navigate to={'auth'} />}
+          path='member/login'
+          element={<Login />}
         />
-      </Routes>
-    </BrowserRouter>
+        <Route
+          path='member/signUp'
+          element={<SignUp />}
+        />
+      </Route>
+
+      <Route
+        path='/todo'
+        element={<Todo />}>
+        <Route
+          path='list'
+          element={<Todos />}
+        />
+      </Route>
+
+      <Route
+        path='*'
+        element={<Navigate to={'auth'} />}
+      />
+
+      <Route
+        path='*'
+        element={<p>잘못 된 페이지 입니다.</p>}
+      />
+    </Routes>
   );
 };
 

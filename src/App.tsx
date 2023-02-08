@@ -1,19 +1,27 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Wrapper from 'containers/Wrapper';
 import GlobalStyle from 'assets/styles/global';
-import SpoqaHanSansNeo from 'assets/styles/fonts';
 
+import { BrowserRouter } from 'react-router-dom';
 import { UserContextProvider } from 'context/UserContext';
+import { ModalContextProvider } from 'context/ModalContext';
+import { ThemeContextProvider } from 'context/ThemeContext';
+
+import Modal from 'components/modal/index';
 
 function App() {
   return (
-    <Fragment>
-      <UserContextProvider>
-        <Wrapper />
-      </UserContextProvider>
-      <SpoqaHanSansNeo />
-      <GlobalStyle />
-    </Fragment>
+    <ThemeContextProvider>
+      <ModalContextProvider>
+        <UserContextProvider>
+          <BrowserRouter>
+            <GlobalStyle />
+            <Wrapper />
+            <Modal />
+          </BrowserRouter>
+        </UserContextProvider>
+      </ModalContextProvider>
+    </ThemeContextProvider>
   );
 }
 
