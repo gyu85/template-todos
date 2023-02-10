@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { requestLogin } from 'api/auth';
 import { setLocalforage } from 'utils/localforage';
@@ -9,8 +10,32 @@ import ButtonTextType from 'components/common/ButtonTextType';
 
 import { isEmailValid, isPasswordValid } from 'utils/validation';
 import { useUserDispatch, useUserState } from 'context/UserContext';
+import { useThemeState } from 'context/ThemeContext';
+
+type ThemeProps = {
+  theme: {
+    color: string;
+    fontSize: string;
+    hoverColor: string;
+  };
+};
+
+const LinkSignUp = styled.div`
+  padding-top: 28px;
+  text-align: center;
+  .link-signup {
+    color: ${(props: ThemeProps) => props.theme.color};
+    font-size: ${(props: ThemeProps) => props.theme.fontSize};
+
+    &:hover {
+      color: ${(props: ThemeProps) => props.theme.hoverColor};
+      text-decoration: none;
+    }
+  }
+`;
 
 const Login = () => {
+  const { colors, fontSize } = useThemeState();
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [isEmail, setEmailValid] = useState(false);
@@ -38,7 +63,7 @@ const Login = () => {
           type: 'LOGIN'
         });
 
-        // navigate('/todo/list');
+        navigate('/todo/list');
       })
       .catch(error => {
         alert(error);
@@ -50,7 +75,6 @@ const Login = () => {
   };
 
   const handleChange = (event: any) => {
-    console.log(event.target);
     switch (event.target.name) {
       case 'memberId':
         setUserId(event.target.value);
@@ -99,6 +123,18 @@ const Login = () => {
           isDisabled={!(isEmail && isPassword)}
         />
       </form>
+      <LinkSignUp
+        theme={{
+          fontSize: fontSize.label.large,
+          color: colors.primary40,
+          hoverColor: colors.secondary10
+        }}>
+        <Link
+          to='/member/signUp'
+          className='link-signup'>
+          회원가입
+        </Link>
+      </LinkSignUp>
     </Fragment>
   );
 };

@@ -32,7 +32,7 @@ const Wrapper = () => {
 
       <Route
         path='*'
-        element={<Navigate to={'auth'} />}
+        element={<Navigate to={'/member/login'} />}
       />
 
       <Route
