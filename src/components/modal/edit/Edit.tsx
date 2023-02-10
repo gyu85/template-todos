@@ -22,6 +22,7 @@ const Edit = ({ title, content, onClose }: TodoEditData) => {
             labelText='todo 타이틀'
             fieldValue={title}
             isError={false}
+            errorMessage='todo 제목을 입력해주세요.'
             onChange={() => console.log('test')}
           />
           <TextArea

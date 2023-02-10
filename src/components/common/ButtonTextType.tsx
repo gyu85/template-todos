@@ -9,7 +9,7 @@ interface ButtonProps {
   size?: 'full' | 'large' | 'medium' | 'small';
   text: string;
   isDisabled: boolean;
-  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   style?: {
     [cssProperty: string]: string;
   };

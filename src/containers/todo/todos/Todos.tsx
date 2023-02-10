@@ -118,6 +118,7 @@ const Todos = () => {
           isLabel={true}
           labelText='Todo 타이틀'
           isError={false}
+          errorMessage='todo 제목을 입력해주세요.'
           htmlFor='todoTitle'
           fieldValue={todoTitle}
           onChange={handleChange}

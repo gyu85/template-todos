@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,8 +9,8 @@ import TextField from 'components/forms/TextField';
 import ButtonTextType from 'components/common/ButtonTextType';
 
 import { isEmailValid, isPasswordValid } from 'utils/validation';
-import { useUserDispatch, useUserState } from 'context/UserContext';
 import { useThemeState } from 'context/ThemeContext';
+import { useUserDispatch } from 'context/UserContext';
 
 type ThemeProps = {
   theme: {
@@ -36,17 +36,13 @@ const LinkSignUp = styled.div`
 
 const Login = () => {
   const { colors, fontSize } = useThemeState();
-  const [userId, setUserId] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [isEmail, setEmailValid] = useState(false);
-  const [isPassword, setPasswordValid] = useState(false);
-
   const dispatch = useUserDispatch();
-  const { isUserLogin } = useUserState();
-
   const navigate = useNavigate();
 
-  const handleSubmit = (event: any) => {
+  const [userId, setUserId] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     requestLogin({
@@ -69,27 +65,18 @@ const Login = () => {
         alert(error);
         setUserId('');
         setUserPassword('');
-        setEmailValid(false);
-        setPasswordValid(false);
       });
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
       case 'memberId':
         setUserId(event.target.value);
-        setEmailValid(isEmailValid(event.target.value));
         break;
       default:
         setUserPassword(event.target.value);
-        setPasswordValid(isPasswordValid(event.target.value));
     }
   };
-
-  useEffect(() => {
-    // navigate('/todo/list');
-    // eslint-disable-next-line
-  }, [isUserLogin]);
 
   return (
     <Fragment>
@@ -100,7 +87,8 @@ const Login = () => {
           htmlFor='memberId'
           labelText='아이디'
           fieldValue={userId}
-          isError={false}
+          isError={!!userId && !isEmailValid(userId)}
+          errorMessage='이메일 형식으로 입력해주세요.'
           onChange={handleChange}
         />
 
@@ -110,7 +98,8 @@ const Login = () => {
           htmlFor='memberPassword'
           labelText='비밀번호'
           fieldValue={userPassword}
-          isError={false}
+          isError={!!userPassword && !isPasswordValid(userPassword)}
+          errorMessage='영문 특수문자 숫자 조합 8자 이상 입력해주세요.'
           onChange={handleChange}
         />
 
@@ -118,9 +107,8 @@ const Login = () => {
           type='submit'
           size='full'
           text='LOGIN'
-          onClick={() => console.log('로그인 핸들러 추가')}
           style={{ marginTop: '20px' }}
-          isDisabled={!(isEmail && isPassword)}
+          isDisabled={!(isEmailValid(userId) && isPasswordValid(userPassword))}
         />
       </form>
       <LinkSignUp

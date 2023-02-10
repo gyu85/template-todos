@@ -92,6 +92,7 @@ const SignUp = () => {
           labelText='아이디'
           fieldValue={userId}
           isError={false}
+          errorMessage=''
           onChange={handleChange}
         />
         <TextField
@@ -101,6 +102,7 @@ const SignUp = () => {
           labelText='비밀번호'
           fieldValue={userPassword}
           isError={false}
+          errorMessage=''
           onChange={handleChange}
         />
 
@@ -111,6 +113,7 @@ const SignUp = () => {
           labelText='비밀번호 확인'
           fieldValue={userPasswordConfirm}
           isError={false}
+          errorMessage=''
           onChange={handleChange}
         />
 
