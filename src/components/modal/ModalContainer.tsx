@@ -4,12 +4,13 @@ import { useModalState, useModalDispatch } from 'context/ModalContext';
 
 const EditModal = lazy(() => import('components/modal/edit/Edit'));
 const DetailModal = lazy(() => import('components/modal/detail/Detail'));
+const ConfirmModal = lazy(() => import('components/modal/confirm/Confirm'));
 
 const ModalContainer = () => {
   const modalState = useModalState();
   const modalDispatch = useModalDispatch();
 
-  const { type, content } = modalState;
+  const { type, content, handler } = modalState;
 
   const handleClose = () => {
     modalDispatch({ type: null, content: null });
@@ -36,6 +37,15 @@ const ModalContainer = () => {
           createdAt={content.createdAt}
           updatedAt={content.createdAt}
           onClose={handleClose}
+        />
+      );
+
+    case 'confirm':
+      return (
+        <ConfirmModal
+          message={content.message}
+          onClose={handleClose}
+          handler={handler ? handler : () => null}
         />
       );
 

@@ -39,7 +39,7 @@ const Todos = () => {
   const [editContent, setEditContent] = useState('');
   const [editTodoId, setEditTodoId] = useState('');
 
-  const modal = useModalDispatch();
+  const modalDispatch = useModalDispatch();
 
   const handleChange = (event: any) => {
     switch (event.target.name) {
@@ -51,44 +51,15 @@ const Todos = () => {
     }
   };
 
-  const enrollTodo = () => {
-    createTodo({
-      title: todoTitle,
-      content: todoContent
-    })
-      .then(updatedData => {
-        const { data } = updatedData;
-        // setTodoData(prevTodos => [...prevTodos, data]);
-        setTodoTitle('');
-        setTodoContent('');
-      })
-      .catch(error => {
-        alert(error);
-      });
-  };
-
   const deleteCurrentTodo = (event: any) => {
+    const message = '삭제 하시겠습니까?';
     const currentId = event.target.dataset.id;
 
-    deleteTodo(currentId)
-      .then(() => {
-        alert('해당 todo가 삭제 되었습니다.');
-
-        setTodoData((prevTodos: any) => {
-          return prevTodos.reduce((acumulate: any, current: Response) => {
-            const { id } = current;
-
-            if (id !== currentId) {
-              acumulate.push(current);
-            }
-
-            return acumulate;
-          }, []);
-        });
-      })
-      .catch(error => {
-        alert(error);
-      });
+    modalDispatch({
+      type: 'CONFIRM',
+      content: { message },
+      handler: () => console.log('삭제 work')
+    });
   };
 
   const showDetail = (event: any) => {
@@ -97,29 +68,11 @@ const Todos = () => {
     getTodoById(currentid)
       .then(currentTodo => {
         const { data } = currentTodo;
-        modal({ type: 'DETAIL', content: data });
+        modalDispatch({ type: 'DETAIL', content: data });
       })
       .catch(error => {
         alert(error);
       });
-  };
-
-  const handleEditModify = () => {};
-
-  const handleCancel = () => {
-    setDetailData({});
-    setDetailShow(false);
-  };
-
-  const editChange = (event: any) => {
-    switch (event.target.name) {
-      case 'editTitle':
-        setEditTitle(event.target.value);
-        break;
-
-      default:
-        setEditContent(event.target.value);
-    }
   };
 
   const handleModify = (event: any) => {
@@ -129,53 +82,20 @@ const Todos = () => {
       .then(currentTodo => {
         const { data } = currentTodo;
 
-        modal({ type: 'EDIT', content: data });
+        modalDispatch({ type: 'EDIT', content: data });
       })
       .catch(error => {
         alert(error);
       });
   };
 
-  const editSave = (event: any) => {
-    const currentId = event.target.dataset.id;
-
-    updateTodo({
-      todoId: currentId,
-      params: {
-        title: editTitle,
-        content: editContent
-      }
-    })
-      .then(updatedData => {
-        const {
-          data: { id: currentId, title, content, createdAt, updatedAt }
-        } = updatedData;
-
-        setTodoData(prevTodos => {
-          return prevTodos.reduce((acumulate: any, current: Response) => {
-            const { id } = current;
-
-            if (id === currentId) {
-              current.title = title;
-              current.content = content;
-              current.createdAt = createdAt;
-              current.updatedAt = updatedAt;
-            }
-
-            acumulate.push(current);
-
-            return acumulate;
-          }, []);
-        });
-
-        setEditShow(false);
-        setEditTitle('');
-        setEditContent('');
-        setEditTodoId('');
-      })
-      .catch(error => {
-        alert(error);
-      });
+  const handleEnroll = () => {
+    const message = '등록 하시겠습니까?';
+    modalDispatch({
+      type: 'CONFIRM',
+      content: { message },
+      handler: () => console.log('workTest')
+    });
   };
 
   useEffect(() => {
@@ -215,7 +135,7 @@ const Todos = () => {
           size='full'
           text='등록하기'
           style={{ margin: '20px 0' }}
-          onClick={() => console.log('TODOS 등록하기 핸들러 추가')}
+          onClick={handleEnroll}
           isDisabled={!(todoTitle && todoContent)}
         />
       </div>

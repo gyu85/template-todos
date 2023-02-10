@@ -6,6 +6,7 @@ export interface ModalInfo {
   readonly content: {
     [key: string]: string;
   } | null;
+  handler?: () => void;
 }
 
 const ModalStateContext = createContext<ModalInfo | undefined>(undefined);
@@ -13,6 +14,7 @@ const ModalStateContext = createContext<ModalInfo | undefined>(undefined);
 type ModalAction = {
   type: 'DETAIL' | 'EDIT' | 'CONFIRM' | null;
   content: { [key: string]: string } | null;
+  handler?: () => void;
 };
 
 type ModalStateDispatch = Dispatch<ModalAction>;
@@ -49,7 +51,8 @@ const reducer = (state: ModalInfo, action: ModalAction): ModalInfo => {
       return {
         isModalShow: true,
         type: 'confirm',
-        content: action.content
+        content: action.content,
+        handler: action.handler
       };
     default:
       return { ...state, isModalShow: false, type: null, content: null };
