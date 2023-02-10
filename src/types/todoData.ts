@@ -15,3 +15,9 @@ export interface TodoDetails {
 }
 
 export type TodoEditData = Pick<TodoDetails, 'title' | 'content' | 'onClose'>;
+
+export interface TodoEnroll {
+  message: string;
+  onClose: () => void;
+  handler: () => void;
+}
