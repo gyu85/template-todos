@@ -26,11 +26,9 @@ const Todo = () => {
           type: 'LOGIN'
         });
 
-        // navigate('/todo/list');
-        console.log('todo list 여기수정');
-      } else {
-        // navigate('login');
         navigate('/todo/list');
+      } else {
+        navigate('login');
       }
     });
 
