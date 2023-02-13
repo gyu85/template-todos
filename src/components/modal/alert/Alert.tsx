@@ -17,10 +17,10 @@ const Message = styled.p`
 
 const Alert = ({
   message,
-  onClose
+  handler
 }: {
   message: string;
-  onClose: () => void;
+  handler: () => void;
 }) => {
   const { fontSize } = useThemeState();
 
@@ -35,7 +35,7 @@ const Alert = ({
           size='small'
           text='확인'
           isDisabled={false}
-          onClick={onClose}
+          onClick={handler}
         />
       </div>
     </Container>

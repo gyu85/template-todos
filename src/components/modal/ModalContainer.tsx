@@ -54,7 +54,7 @@ const ModalContainer = () => {
       return (
         <AlertModal
           message={content.message}
-          onClose={handleClose}
+          handler={handler ? handler : handleClose}
         />
       );
 

@@ -59,7 +59,8 @@ const reducer = (state: ModalInfo, action: ModalAction): ModalInfo => {
       return {
         isModalShow: true,
         type: 'alert',
-        content: action.content
+        content: action.content,
+        handler: action.handler
       };
 
     default:

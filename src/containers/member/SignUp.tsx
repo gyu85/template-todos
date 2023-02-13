@@ -9,21 +9,20 @@ import { setLocalforage } from 'utils/localforage';
 
 import { isEmailValid, isPasswordValid } from 'utils/validation';
 import { useUserDispatch, useUserState } from 'context/UserContext';
+import { useModalDispatch } from 'context/ModalContext';
 
 const SignUp = () => {
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userPasswordConfirm, setUserPasswordConfirm] = useState('');
-
-  const [isEmail, setEmailValid] = useState(false);
-  const [isPassword, setPasswordValid] = useState(false);
+  const modalDispatch = useModalDispatch();
 
   const { isUserLogin } = useUserState();
   const dispatch = useUserDispatch();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     requestSignUp({
@@ -34,51 +33,44 @@ const SignUp = () => {
         const { message, token } = data;
         setLocalforage('userTodoInfo', { token: token });
 
-        alert(message);
+        modalDispatch({
+          type: 'ALERT',
+          content: { message },
+          handler: () => {
+            dispatch({
+              type: 'LOGIN'
+            });
 
-        dispatch({
-          type: 'LOGIN'
+            modalDispatch({ type: null, content: null });
+          }
         });
       })
       .catch(error => {
-        alert(error);
+        modalDispatch({ type: 'ALERT', content: { message: error } });
         setUserId('');
         setUserPassword('');
         setUserPasswordConfirm('');
-
-        setEmailValid(false);
-        setPasswordValid(false);
       });
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
       case 'memberId':
         setUserId(event.target.value);
-        setEmailValid(isEmailValid(event.target.value));
         break;
 
       case 'memberPassword':
         setUserPassword(event.target.value);
-        setPasswordValid(
-          isPasswordValid(event.target.value) &&
-            event.target.value === userPasswordConfirm
-        );
         break;
 
       default:
         setUserPasswordConfirm(event.target.value);
-        setPasswordValid(
-          isPasswordValid(event.target.value) &&
-            event.target.value === userPassword
-        );
     }
   };
 
   useEffect(() => {
     if (isUserLogin) {
-      // navigate('/todo/list');
-      console.log('여기 수정');
+      navigate('/todo/list');
     }
   }, [isUserLogin, navigate]);
 
@@ -91,8 +83,8 @@ const SignUp = () => {
           htmlFor='memberId'
           labelText='아이디'
           fieldValue={userId}
-          isError={false}
-          errorMessage=''
+          isError={!!userId && !isEmailValid(userId)}
+          errorMessage='이메일 형식으로 입력해주세요.'
           onChange={handleChange}
         />
         <TextField
@@ -101,8 +93,8 @@ const SignUp = () => {
           htmlFor='memberPassword'
           labelText='비밀번호'
           fieldValue={userPassword}
-          isError={false}
-          errorMessage=''
+          isError={!!userPassword && !isPasswordValid(userPassword)}
+          errorMessage='영문 특수문자 숫자 조합 8자 이상 입력해주세요.'
           onChange={handleChange}
         />
 
@@ -112,8 +104,10 @@ const SignUp = () => {
           htmlFor='passwordConfirm'
           labelText='비밀번호 확인'
           fieldValue={userPasswordConfirm}
-          isError={false}
-          errorMessage=''
+          isError={
+            !!userPasswordConfirm && !(userPassword === userPasswordConfirm)
+          }
+          errorMessage='비밀번호와 다릅니다.'
           onChange={handleChange}
         />
 
@@ -121,9 +115,14 @@ const SignUp = () => {
           type='submit'
           size='full'
           text='SIGNUP'
-          onClick={() => console.log('회원가입 핸들러 추가')}
           style={{ marginTop: '20px' }}
-          isDisabled={!(isEmail && isPassword)}
+          isDisabled={
+            !(
+              isEmailValid(userId) &&
+              isPasswordValid(userPassword) &&
+              userPassword === userPasswordConfirm
+            )
+          }
         />
       </form>
     </Fragment>
