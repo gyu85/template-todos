@@ -44,9 +44,11 @@ export const api = async function ({ url, method, params }: IApiParameter) {
     } else {
       return response.json();
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof Error) {
       throw new Error(`${error}`).message;
+    } else {
+      throw error.details;
     }
   }
 };
