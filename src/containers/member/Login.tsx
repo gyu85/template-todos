@@ -11,6 +11,7 @@ import ButtonTextType from 'components/common/ButtonTextType';
 import { isEmailValid, isPasswordValid } from 'utils/validation';
 import { useThemeState } from 'context/ThemeContext';
 import { useUserDispatch } from 'context/UserContext';
+import { useModalDispatch } from 'context/ModalContext';
 
 type ThemeProps = {
   theme: {
@@ -36,8 +37,9 @@ const LinkSignUp = styled.div`
 
 const Login = () => {
   const { colors, fontSize } = useThemeState();
-  const dispatch = useUserDispatch();
+  const userDispatch = useUserDispatch();
   const navigate = useNavigate();
+  const modalDispatch = useModalDispatch();
 
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -55,14 +57,17 @@ const Login = () => {
 
         alert(message);
 
-        dispatch({
+        userDispatch({
           type: 'LOGIN'
         });
 
         navigate('/todo/list');
       })
       .catch(error => {
-        alert(error);
+        // alert(error);
+
+        modalDispatch({ type: 'ALERT', content: { message: error } });
+
         setUserId('');
         setUserPassword('');
       });

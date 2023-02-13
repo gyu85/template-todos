@@ -5,6 +5,7 @@ import { useModalState, useModalDispatch } from 'context/ModalContext';
 const EditModal = lazy(() => import('components/modal/edit/Edit'));
 const DetailModal = lazy(() => import('components/modal/detail/Detail'));
 const ConfirmModal = lazy(() => import('components/modal/confirm/Confirm'));
+const AlertModal = lazy(() => import('components/modal/alert/Alert'));
 
 const ModalContainer = () => {
   const modalState = useModalState();
@@ -46,6 +47,14 @@ const ModalContainer = () => {
           message={content.message}
           onClose={handleClose}
           handler={handler ? handler : () => null}
+        />
+      );
+
+    case 'alert':
+      return (
+        <AlertModal
+          message={content.message}
+          onClose={handleClose}
         />
       );
 
