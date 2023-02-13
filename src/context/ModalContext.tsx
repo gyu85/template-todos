@@ -12,7 +12,7 @@ export interface ModalInfo {
 const ModalStateContext = createContext<ModalInfo | undefined>(undefined);
 
 type ModalAction = {
-  type: 'DETAIL' | 'EDIT' | 'CONFIRM' | null;
+  type: 'DETAIL' | 'EDIT' | 'CONFIRM' | 'ALERT' | null;
   content: { [key: string]: string } | null;
   handler?: () => void;
 };
@@ -54,6 +54,14 @@ const reducer = (state: ModalInfo, action: ModalAction): ModalInfo => {
         content: action.content,
         handler: action.handler
       };
+
+    case 'ALERT':
+      return {
+        isModalShow: true,
+        type: 'alert',
+        content: action.content
+      };
+
     default:
       return { ...state, isModalShow: false, type: null, content: null };
   }
