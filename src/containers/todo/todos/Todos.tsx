@@ -1,6 +1,4 @@
 import { Fragment, useState, useEffect } from 'react';
-import styled from 'styled-components';
-
 import { useModalDispatch } from 'context/ModalContext';
 
 import { TodoData } from 'types/todoData';
@@ -13,10 +11,8 @@ import {
   deleteTodo
 } from 'api/todo';
 
+import Enroll from 'containers/todo/enroll/Enroll';
 import TodoList from '../list/TodoList';
-import TextField from 'components/forms/TextField';
-import TextArea from 'components/forms/TextArea';
-import ButtonTextType from 'components/common/ButtonTextType';
 
 interface Response {
   id: string;
@@ -29,15 +25,7 @@ interface Response {
 const Todos = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const [todoContent, setTodoContent] = useState('');
-  const [todoData, setTodoData] = useState<Array<TodoData>>([]);
-
-  const [isDetailShow, setDetailShow] = useState(false);
-  const [detailData, setDetailData] = useState({});
-
-  const [isEditShow, setEditShow] = useState(false);
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
-  const [editTodoId, setEditTodoId] = useState('');
+  const [todoData, setTodoData] = useState<Array<Response>>([]);
 
   const modalDispatch = useModalDispatch();
 
@@ -49,6 +37,23 @@ const Todos = () => {
       default:
         setTodoContent(event.target.value);
     }
+  };
+
+  const handleEnroll = () => {
+    const message = '등록 하시겠습니까?';
+    modalDispatch({
+      type: 'CONFIRM',
+      content: { message },
+      handler: () => {
+        createTodo({ title: todoTitle, content: todoContent }).then(data => {
+          const { data: responseData }: { data: Response } = data;
+          modalDispatch({ type: null, content: null });
+          setTodoData([...todoData, responseData]);
+          setTodoTitle('');
+          setTodoContent('');
+        });
+      }
+    });
   };
 
   const deleteCurrentTodo = (event: any) => {
@@ -89,15 +94,6 @@ const Todos = () => {
       });
   };
 
-  const handleEnroll = () => {
-    const message = '등록 하시겠습니까?';
-    modalDispatch({
-      type: 'CONFIRM',
-      content: { message },
-      handler: () => console.log('workTest')
-    });
-  };
-
   useEffect(() => {
     getTodos()
       .then(todosData => {
@@ -111,37 +107,12 @@ const Todos = () => {
 
   return (
     <Fragment>
-      <div>
-        <h2>등록하기</h2>
-        <TextField
-          type='text'
-          isLabel={true}
-          labelText='Todo 타이틀'
-          isError={false}
-          errorMessage='todo 제목을 입력해주세요.'
-          htmlFor='todoTitle'
-          fieldValue={todoTitle}
-          onChange={handleChange}
-        />
-        <TextArea
-          isLabel={true}
-          labelText='Todo 설명'
-          isError={false}
-          htmlFor='todoContent'
-          fieldValue={todoContent}
-          onChange={handleChange}
-        />
-        <ButtonTextType
-          type='button'
-          size='full'
-          text='등록하기'
-          style={{ margin: '20px 0' }}
-          onClick={handleEnroll}
-          isDisabled={!(todoTitle && todoContent)}
-        />
-      </div>
-      <hr />
-      <h2>리스트</h2>
+      <Enroll
+        todoTitle={todoTitle}
+        todoContent={todoContent}
+        handleChange={handleChange}
+        handleEnroll={handleEnroll}
+      />
       <TodoList
         todoData={todoData}
         showDetail={showDetail}
